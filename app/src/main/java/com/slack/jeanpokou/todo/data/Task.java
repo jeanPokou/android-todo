@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Objects;
 
+import com.google.common.base.Strings;
 import java.util.UUID;
 
 @Entity(tableName = "tasks")
@@ -86,6 +87,10 @@ public class Task {
 
     public boolean isCompleted() {
         return mCompleted;
+    }
+
+    public boolean isEmpty() {
+        return Strings.isNullOrEmpty(mTitle) && Strings.isNullOrEmpty(mDescription);
     }
 
 

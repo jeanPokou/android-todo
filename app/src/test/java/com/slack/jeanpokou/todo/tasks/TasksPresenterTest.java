@@ -51,7 +51,7 @@ public class TasksPresenterTest {
     @Test
     public void ViewShouldSetPresenter(){
         mPresenter = new TasksPresenter( mTasksRepository,mView);
-        verify(mView).setPresenter(mPresenter);
+        verify(mView).attach(mPresenter);
     }
     @Test
     public void ViewShouldShowTask() {
