@@ -1,4 +1,4 @@
-package com.slack.jeanpokou.todo.tasks;
+package com.slack.jeanpokou.todo.tasklist;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,11 +9,13 @@ import android.support.v7.widget.Toolbar;
 import com.slack.jeanpokou.todo.R;
 import com.slack.jeanpokou.todo.util.Injection;
 
-public class TasksActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
 
-    private TasksPresenter mTasksPresenter;
+    private ListPresenter mListPresenter;
+
+    private ListNavigator mListNavigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +34,21 @@ public class TasksActivity extends AppCompatActivity {
         mDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        // Inserting the Fragment
-        TasksFragment tasksFragment = (TasksFragment) getSupportFragmentManager()
+        // Instantiating ListFragment
+        ListFragment listFragment = (ListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
-        if (tasksFragment == null) {
-            tasksFragment = TasksFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, tasksFragment).commit();
+        if (listFragment == null) {
+            listFragment = ListFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, listFragment).commit();
 
         }
 
-        // Create the Presenter
-        mTasksPresenter = new TasksPresenter(Injection.provideTaskRepository(getApplicationContext()), tasksFragment);
+        // Create the ListPresenter
+        mListPresenter = new ListPresenter(
+                Injection.provideTaskRepository(getApplicationContext())
+                ,listFragment
+                ,new ListNavigator(listFragment)
+                );
     }
 
 }

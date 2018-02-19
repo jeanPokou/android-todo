@@ -2,6 +2,6 @@ package com.slack.jeanpokou.todo;
 
 
 public interface BaseView<T> {
-    void attach( T presenter );
-    void detach();
+    void attachPresenter(T presenter );
+    void detachPresenter();
 }

@@ -1,18 +1,14 @@
-package com.slack.jeanpokou.todo.addedittask;
+package com.slack.jeanpokou.todo.taskaddedit;
 
 
+import com.slack.jeanpokou.todo.BaseNavigator;
 import com.slack.jeanpokou.todo.BasePresenter;
 import com.slack.jeanpokou.todo.BaseView;
 
-public interface AddEditTaskContract {
+public interface TaskAddEditMvp {
 
-    interface View extends BaseView {
-
+    interface View extends BaseView <Presenter>{
         void showEmptyTaskError();
-
-        void showTaskList();
-
-
 
     }
 
@@ -24,6 +20,10 @@ public interface AddEditTaskContract {
 
         void saveTask(String title, String description);
 
+    }
+
+    interface Navigator extends BaseNavigator {
+        void navigateToList();
     }
 
 

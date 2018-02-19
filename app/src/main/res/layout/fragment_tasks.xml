@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.slack.jeanpokou.todo.tasks.TasksFragment">
+    tools:context="com.slack.jeanpokou.todo.tasklist.ListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update bllistFragmentment layout -->
     <TextView
         android:id="@+id/testTask"
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.slack.jeanpokou.todo.tasks;
+package com.slack.jeanpokou.todo.tasklist;
 
 import com.google.common.collect.Lists;
 import com.slack.jeanpokou.todo.data.Task;
@@ -18,7 +18,7 @@ import java.util.List;
 import static org.mockito.Mockito.verify;
 
 
-public class TasksPresenterTest {
+public class ListPresenterTest {
 
     private static final List<Task> MANY_TASK = Lists.newArrayList
             (
@@ -27,7 +27,7 @@ public class TasksPresenterTest {
                     new Task("task 3 ", "description 3")
             );
     @Mock
-    private TasksContract.View mView = new TasksFragment() ;
+    private TaskListMvp.View mView = new ListFragment() ;
 
     @Mock
     private TasksRepository mTasksRepository;
@@ -35,7 +35,7 @@ public class TasksPresenterTest {
     @Mock
     private TasksDataContractLocalImpl mTasksDataContractLocal;
 
-    private TasksContract.Presenter mPresenter ;
+    private TaskListMvp.Presenter mPresenter ;
 
     @Captor
     private ArgumentCaptor<TasksDataContract.LoadTaskCallBack> mCallback;
@@ -50,15 +50,15 @@ public class TasksPresenterTest {
 
     @Test
     public void ViewShouldSetPresenter(){
-        mPresenter = new TasksPresenter( mTasksRepository,mView);
-        verify(mView).attach(mPresenter);
+        mPresenter = new ListPresenter( mTasksRepository,mView);
+        verify(mView).attachPresenter(mPresenter);
     }
     @Test
     public void ViewShouldShowTask() {
 
 
         // when presenter load tasks list
-        mPresenter = new TasksPresenter(mTasksRepository,mView);
+        mPresenter = new ListPresenter(mTasksRepository,mView);
 
         mPresenter.loadTask();
 
