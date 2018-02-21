@@ -1,8 +1,6 @@
 package com.slack.jeanpokou.todo.tasklist;
 
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,11 +19,12 @@ import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 import com.slack.jeanpokou.todo.R;
-import com.slack.jeanpokou.todo.taskaddedit.AddEditActivity;
 import com.slack.jeanpokou.todo.data.Task;
 import com.slack.jeanpokou.todo.taskdetail.DetailActivity;
 
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -34,7 +34,9 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 
     private TaskListMvp.Presenter mPresenter;
     private TextView mTextView = null;
-    private ListNavigator mListNavigator ;
+    private ListNavigator mListNavigator;
+    private TasksAdapter mAdapter = null;
+    public final String TAG = ListFragment.class.getSimpleName();
 
     /**
      * Instantiates a new Tasks fragment.
@@ -66,9 +68,9 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
                 new Task("TITLE 3", "DESC 3", true)
         )
         );*/
-        TasksAdapter adapter = new TasksAdapter(Lists.<Task>newArrayList());
+        mAdapter = new TasksAdapter(Lists.<Task>newArrayList());
 
-        taskRecyclerView.setAdapter(adapter);
+        taskRecyclerView.setAdapter(mAdapter);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         taskRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
@@ -101,6 +103,8 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 
     }
 
+
+
     /**
      * On Result from AddEditTask AddEditActivity
      *
@@ -110,21 +114,16 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPresenter.result(requestCode,resultCode);
+        Long id = data.getLongExtra ("TASK_INSERTED_ID", -1);
+        mPresenter.result(requestCode, resultCode,id);
     }
 
     @Override
-    public void showTasks(List<Task> listTasks) {
-        for (Task task : listTasks) {
-            mTextView.append(task.getTitle());
-        }
+    public void showTasks(List<Task> taskList) {
+        mAdapter.mTasks = taskList;
     }
 
-    @Override
-    public void showTaskMarkedActive(Task task) {
 
-
-    }
 
     @Override
     public void showTaskDetailsUi(String taskId) {
@@ -134,21 +133,20 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
     }
 
     @Override
-    public void showSuccessSavedMessage() {
-        Toast.makeText(getContext(), "TASK ADDED", Toast.LENGTH_LONG).show();
+    public void showSuccessSavedTasks(Long id) {
+        Toast.makeText(getContext(), "TASK ADDED WITH ID" + id, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showErrorSavedTasks() {
+        Toast.makeText(getContext(), "ERROR ADDING TASK",Toast.LENGTH_LONG).show();
+    }
 
 
     private static class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
         private List<Task> mTasks;
 
-        /**
-         * Instantiates a new Tasks adapter.
-         *
-         * @param mTasks the m tasks
-         */
         TasksAdapter(List<Task> mTasks) {
             this.mTasks = mTasks;
         }

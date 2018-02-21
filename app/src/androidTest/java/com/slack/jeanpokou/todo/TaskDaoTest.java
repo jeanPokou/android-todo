@@ -2,12 +2,11 @@ package com.slack.jeanpokou.todo;
 
 
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.slack.jeanpokou.todo.data.Task;
-import com.slack.jeanpokou.todo.data.source.local.ToDoDataBase;
+import com.slack.jeanpokou.todo.data.source.local.TaskDataBase;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -24,7 +23,7 @@ import static org.hamcrest.Matchers.is;
 public class TaskDaoTest {
 
     private static final Task ONE_TASK = new Task("task1","description1");
-    private ToDoDataBase mDataBase;
+    private TaskDataBase mDataBase;
 
     @Test
     public void test() {
@@ -34,7 +33,7 @@ public class TaskDaoTest {
     public void setUp() {
         mDataBase = Room.inMemoryDatabaseBuilder
                 (
-                        InstrumentationRegistry.getContext(),ToDoDataBase.class
+                        InstrumentationRegistry.getContext(),TaskDataBase.class
                 ).build();
     }
     @After

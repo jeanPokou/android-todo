@@ -7,18 +7,30 @@ import com.slack.jeanpokou.todo.data.Task;
 import java.util.List;
 
 /**
- *  Contract between Repositories and  Data Sources
+ * Contract between Repositories and  Data Sources
  */
 
 public interface TasksDataContract {
 
-    interface LoadTaskCallBack {
-        void onTasksLoaded(List<Task> taskList);
-        void onDataNotAvailable();
+
+    void retrieveTasks(@NonNull retrieveTasksCallBack callback);
+
+    void saveTasks(@NonNull Task tasks, @NonNull saveTasksCallback callback);
+
+    interface retrieveTasksCallBack {
+
+        void onSuccess(List<Task> taskList);
+
+        void onError();
     }
 
-    void getTasks (@NonNull LoadTaskCallBack callback);
-    void insertTask(@NonNull Task tasks);
+    interface saveTasksCallback {
+
+        void onSuccess(Long id) ;
+
+        void onError();
+
+    }
 
 
 }

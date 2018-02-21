@@ -11,8 +11,9 @@ import com.slack.jeanpokou.todo.util.Injection;
 public class AddEditActivity extends AppCompatActivity {
 
     public static final int REQUEST_ADD_TASK = 1;
-    private AddEditTaskPresenter mPresenter;
-    private  AddEditNavigator mNavigator;
+
+    private AddEditTaskPresenter presenter;
+    private  AddEditNavigator navigator;
 
     private String taskId;
     private ActionBar mActionBar;
@@ -47,13 +48,13 @@ public class AddEditActivity extends AppCompatActivity {
          * Use presenter and attaching ListFragment, Repository and TaskId
          */
 
-        mNavigator = new AddEditNavigator(this);
+        navigator = new AddEditNavigator(this);
 
-        mPresenter = new AddEditTaskPresenter(
+        presenter = new AddEditTaskPresenter(
                 taskId
                 , addEditTaskFragment
                 , Injection.provideTaskRepository(getApplicationContext())
-                ,mNavigator
+                , navigator
                 , false
         );
     }

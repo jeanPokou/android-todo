@@ -9,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.slack.jeanpokou.todo.R;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class AddEditTaskFragment extends Fragment implements TaskAddEditMvp.View    {
@@ -20,7 +19,9 @@ public class AddEditTaskFragment extends Fragment implements TaskAddEditMvp.View
     private static final String TAG = AddEditTaskFragment.class.getSimpleName();
     public static final String ARGUMENT_EDIT_TASK_ID = " EDIT_TASK_ID" ;
     public static final int REQUEST_ADD_EDIT = 1;
-    private TaskAddEditMvp.Presenter mPresenter;
+
+
+    private TaskAddEditMvp.Presenter presenter;
 
     public AddEditTaskFragment() {
     }
@@ -53,7 +54,7 @@ public class AddEditTaskFragment extends Fragment implements TaskAddEditMvp.View
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.saveTask(mTitle.getText().toString(), mDescription.getText().toString());
+                presenter.saveTask(mTitle.getText().toString(), mDescription.getText().toString());
                 // Log.i(TAG, "description is " + mDescription.getText().toString() + " and title is " + mTitle.getText().toString());
             }
         });
@@ -68,7 +69,7 @@ public class AddEditTaskFragment extends Fragment implements TaskAddEditMvp.View
 
     @Override
     public void attachPresenter(TaskAddEditMvp.Presenter presenter) {
-        this.mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
@@ -77,9 +78,14 @@ public class AddEditTaskFragment extends Fragment implements TaskAddEditMvp.View
     }
 
     @Override
-    public void showEmptyTaskError() {
-
+    public void showErrorOnSaveTasks() {
+        Toast.makeText(getContext(), "ERROR IN INSERTION OPERATION", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showErrorOnEmptyTask() {
 
+        Toast.makeText(getContext(), "ERROR TASK IS EMPTY", Toast.LENGTH_SHORT).show();
+
+    }
 }

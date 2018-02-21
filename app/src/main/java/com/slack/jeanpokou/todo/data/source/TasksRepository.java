@@ -4,7 +4,7 @@ package com.slack.jeanpokou.todo.data.source;
 import android.support.annotation.NonNull;
 
 import com.slack.jeanpokou.todo.data.Task;
-import com.slack.jeanpokou.todo.data.source.local.TasksDataContractLocalImpl;
+import com.slack.jeanpokou.todo.data.source.local.LocalDataSource;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TasksRepository  implements TasksDataContract{
 
     private static TasksRepository INSTANCE = null;
-    private final TasksDataContractLocalImpl mTasksLocalDataSource;
+    private final LocalDataSource mTasksLocalDataSource;
 
-    public  static TasksRepository getInstance( TasksDataContractLocalImpl tasksLocalDataSource) {
+    public  static TasksRepository getInstance( LocalDataSource tasksLocalDataSource) {
 
         if(INSTANCE == null) {
             INSTANCE = new TasksRepository(tasksLocalDataSource);
@@ -25,30 +25,48 @@ public class TasksRepository  implements TasksDataContract{
     }
 
 
-    private TasksRepository(TasksDataContractLocalImpl tasksLocalDataSource) {
+    private TasksRepository(LocalDataSource tasksLocalDataSource) {
         mTasksLocalDataSource = checkNotNull(tasksLocalDataSource);
     }
 
+
     @Override
-    public void getTasks(@NonNull final LoadTaskCallBack callback) {
+    public void retrieveTasks(@NonNull final retrieveTasksCallBack callback) {
 
         checkNotNull(callback);
 
-        mTasksLocalDataSource.getTasks(new LoadTaskCallBack() {
+        mTasksLocalDataSource.retrieveTasks(new retrieveTasksCallBack() {
             @Override
-            public void onTasksLoaded(List<Task> taskList) {
-                callback.onTasksLoaded(taskList);
+            public void onSuccess(List<Task> taskList) {
+                callback.onSuccess(taskList);
             }
 
             @Override
-            public void onDataNotAvailable() {
-                callback.onDataNotAvailable();
+            public void onError() {
+                callback.onError();
             }
         });
     }
 
     @Override
-    public void insertTask(@NonNull Task tasks) {
-        mTasksLocalDataSource.insertTask(tasks);
+    public void saveTasks(@NonNull Task tasks, @NonNull final saveTasksCallback callback) {
+
+        checkNotNull(tasks);
+        checkNotNull(callback);
+
+        mTasksLocalDataSource.saveTasks(tasks, new saveTasksCallback() {
+
+            @Override
+            public void onSuccess(Long id) {
+                callback.onSuccess(id);
+            }
+
+            @Override
+            public void onError() {
+                callback.onError();
+            }
+        });
+
     }
+
 }

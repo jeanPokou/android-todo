@@ -6,16 +6,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import com.slack.jeanpokou.todo.R;
 import com.slack.jeanpokou.todo.util.Injection;
 
 public class ListActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout drawerLayout;
 
-    private ListPresenter mListPresenter;
+    private ListPresenter listPresenter;
 
-    private ListNavigator mListNavigator;
+    private ListNavigator listNavigator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +32,8 @@ public class ListActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //setup the navigation drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         // Instantiating ListFragment
@@ -44,11 +46,11 @@ public class ListActivity extends AppCompatActivity {
         }
 
         // Create the ListPresenter
-        mListPresenter = new ListPresenter(
+        listPresenter = new ListPresenter(
                 Injection.provideTaskRepository(getApplicationContext())
-                ,listFragment
-                ,new ListNavigator(listFragment)
-                );
+                , listFragment
+                , new ListNavigator(listFragment)
+        );
     }
 
 }

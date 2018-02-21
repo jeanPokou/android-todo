@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.slack.jeanpokou.todo.data.Task;
 import com.slack.jeanpokou.todo.data.source.TasksDataContract;
 import com.slack.jeanpokou.todo.data.source.TasksRepository;
-import com.slack.jeanpokou.todo.data.source.local.TasksDataContractLocalImpl;
+import com.slack.jeanpokou.todo.data.source.local.LocalDataSource;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +33,15 @@ public class ListPresenterTest {
     private TasksRepository mTasksRepository;
 
     @Mock
-    private TasksDataContractLocalImpl mTasksDataContractLocal;
+    private LocalDataSource mTasksDataContractLocal;
+
+    @Mock
+    private TaskListMvp.Navigator mNavigator;
 
     private TaskListMvp.Presenter mPresenter ;
 
     @Captor
-    private ArgumentCaptor<TasksDataContract.LoadTaskCallBack> mCallback;
+    private ArgumentCaptor<TasksDataContract.retrieveTasksCallBack> mCallback;
 
 
     @Before
@@ -50,7 +53,7 @@ public class ListPresenterTest {
 
     @Test
     public void ViewShouldSetPresenter(){
-        mPresenter = new ListPresenter( mTasksRepository,mView);
+        mPresenter = new ListPresenter( mTasksRepository,mView,mNavigator);
         verify(mView).attachPresenter(mPresenter);
     }
     @Test
@@ -58,16 +61,16 @@ public class ListPresenterTest {
 
 
         // when presenter load tasks list
-        mPresenter = new ListPresenter(mTasksRepository,mView);
+        mPresenter = new ListPresenter(mTasksRepository,mView,mNavigator);
 
-        mPresenter.loadTask();
+        mPresenter.start();
 
-        verify(mTasksRepository).getTasks(mCallback.capture());
+        verify(mTasksRepository).retrieveTasks(mCallback.capture());
 
-        mCallback.getValue().onTasksLoaded(MANY_TASK);
+        mCallback.getValue().onSuccess(MANY_TASK);
 
-        verify(mView).showTasks(MANY_TASK);
         // view should show the same task list
+        verify(mView).showTasks(MANY_TASK);
     };
 
 

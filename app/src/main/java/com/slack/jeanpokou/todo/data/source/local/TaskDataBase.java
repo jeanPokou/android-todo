@@ -13,21 +13,21 @@ import com.slack.jeanpokou.todo.data.Task;
  */
 
 @Database(entities = {Task.class},version = 1)
-public abstract class ToDoDataBase extends RoomDatabase {
-    private static ToDoDataBase INSTANCE;
+public abstract class TaskDataBase extends RoomDatabase {
+    private static TaskDataBase INSTANCE;
 
     private static final  Object sLock = new Object();
 
     public abstract TaskDao taskDao();
 
 
-    public static ToDoDataBase getInstance(Context context) {
+    public static TaskDataBase getInstance(Context context) {
         synchronized (sLock) {
             if(INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder
                         (
                         context.getApplicationContext(),
-                        ToDoDataBase.class,"Tasks.db"
+                        TaskDataBase.class,"Tasks.db"
                         ).build();
             }
             return INSTANCE;

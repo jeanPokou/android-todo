@@ -9,9 +9,6 @@ import java.util.List;
 
 public interface TaskListMvp {
 
-    interface Model {
-
-    }
 
     interface View extends BaseView<Presenter> {
 
@@ -19,19 +16,19 @@ public interface TaskListMvp {
 
         void showTasks(List<Task> listTasks);
 
-        void showTaskMarkedActive(Task task);
+        void showSuccessSavedTasks(Long id);
+
+        void showErrorSavedTasks();
 
 
-        void showSuccessSavedMessage();
+
     }
 
     interface Presenter extends BasePresenter {
 
         void addNewTask(Task task);
 
-        void loadTask();
-
-        void result(int requestCode , int resultCode);
+        void result(int requestCode , int resultCode, Long resultData);
 
         void navigateToAddEditTask();
     }

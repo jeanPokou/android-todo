@@ -7,8 +7,11 @@ import com.slack.jeanpokou.todo.BaseView;
 
 public interface TaskAddEditMvp {
 
-    interface View extends BaseView <Presenter>{
-        void showEmptyTaskError();
+    interface View extends BaseView<Presenter> {
+
+        void showErrorOnSaveTasks();
+
+        void showErrorOnEmptyTask();
 
     }
 
@@ -23,7 +26,7 @@ public interface TaskAddEditMvp {
     }
 
     interface Navigator extends BaseNavigator {
-        void navigateToList();
+        void navigateToList(Long id);
     }
 
 
