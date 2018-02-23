@@ -93,4 +93,23 @@ public class LocalDataSource implements TasksDataContract {
         mAppExecutors.diskIO().execute(runnable);
 
     }
+
+    @Override
+    public void deleteTaskById(@NonNull final String taskId) {
+        checkNotNull(taskId, "taskId can not be null");
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+               mTaskDao.deleteTaskById(taskId);
+               mAppExecutors.mainThread( ).execute(new Runnable() {
+                   @Override
+                   public void run() {
+
+                   }
+               });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
 }

@@ -10,25 +10,23 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TasksRepository  implements TasksDataContract{
+public class TasksRepository implements TasksDataContract {
 
     private static TasksRepository INSTANCE = null;
     private final LocalDataSource mTasksLocalDataSource;
-
-    public  static TasksRepository getInstance( LocalDataSource tasksLocalDataSource) {
-
-        if(INSTANCE == null) {
-            INSTANCE = new TasksRepository(tasksLocalDataSource);
-        }
-        return INSTANCE;
-
-    }
-
 
     private TasksRepository(LocalDataSource tasksLocalDataSource) {
         mTasksLocalDataSource = checkNotNull(tasksLocalDataSource);
     }
 
+    public static TasksRepository getInstance(LocalDataSource tasksLocalDataSource) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new TasksRepository(tasksLocalDataSource);
+        }
+        return INSTANCE;
+
+    }
 
     @Override
     public void retrieveTasks(@NonNull final retrieveTasksCallBack callback) {
@@ -67,6 +65,13 @@ public class TasksRepository  implements TasksDataContract{
             }
         });
 
+    }
+
+    @Override
+    public void deleteTaskById(@NonNull String taskId) {
+        checkNotNull(taskId, "taskId can not be null");
+
+        mTasksLocalDataSource.deleteTaskById(taskId);
     }
 
 }

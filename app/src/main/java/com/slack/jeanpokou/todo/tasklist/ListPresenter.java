@@ -76,6 +76,12 @@ public class ListPresenter implements TaskListMvp.Presenter {
         listNavigator.navigateToAddEdit();
     }
 
+    @Override
+    public void deleteTaskById(String taskId) {
+        repository.deleteTaskById(taskId);
+        taskListView.showSuccessDeleteTask();
+    }
+
 
     /** Base Presenter Functions **/
     @Override

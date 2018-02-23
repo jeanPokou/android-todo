@@ -20,8 +20,7 @@ public interface TaskListMvp {
 
         void showErrorSavedTasks();
 
-
-
+        void showSuccessDeleteTask();
     }
 
     interface Presenter extends BasePresenter {
@@ -31,6 +30,8 @@ public interface TaskListMvp {
         void result(int requestCode , int resultCode, Long resultData);
 
         void navigateToAddEditTask();
+
+        void deleteTaskById(String taskId);
     }
 
     interface Navigator extends BaseNavigator {

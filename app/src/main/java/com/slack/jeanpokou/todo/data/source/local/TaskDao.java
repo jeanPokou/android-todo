@@ -19,4 +19,7 @@ public interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(Task task);
 
+    @Query("DELETE FROM tasks WHERE entryId =  :taskId")
+    int deleteTaskById(String taskId);
+
 }

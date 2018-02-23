@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +69,13 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
                 new Task("TITLE 3", "DESC 3", true)
         )
         );*/
-        mAdapter = new TasksAdapter(Lists.<Task>newArrayList());
+        mAdapter = new TasksAdapter(Lists.<Task>newArrayList(), new TaskItemListener() {
+            @Override
+            public void onTaskClick(View view, Task taskId) {
+                mPresenter.deleteTaskById(taskId.getId());
+            }
+
+        });
 
         taskRecyclerView.setAdapter(mAdapter);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -142,13 +149,21 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
         Toast.makeText(getContext(), "ERROR ADDING TASK",Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showSuccessDeleteTask() {
+        Toast.makeText(getContext(), "TASK REMOVED SUCCESSFULLY",Toast.LENGTH_LONG).show();
+    }
 
+    // RecyclerView Adapter
     private static class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
         private List<Task> mTasks;
+        private TaskItemListener listener;
 
-        TasksAdapter(List<Task> mTasks) {
+
+        TasksAdapter(List<Task> mTasks, TaskItemListener listener) {
             this.mTasks = mTasks;
+            this.listener = listener;
         }
 
         @Override
@@ -164,17 +179,20 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 
         }
 
+
         @Override
         public TasksAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View taskView = inflater.inflate(R.layout.list_item, parent, false);
+            final View taskView = inflater.inflate(R.layout.list_item, parent, false);
             return new ViewHolder(taskView);
         }
+
 
         /**
          * The type View holder.
          */
-        static class ViewHolder extends RecyclerView.ViewHolder {
+
+         class ViewHolder extends RecyclerView.ViewHolder {
 
             private CheckBox mCheckBox;
 
@@ -182,14 +200,34 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 
             /**
              * Instantiates a new View holder.
-             *
              * @param itemView the item view
              */
-            ViewHolder(View itemView) {
+
+            ViewHolder(final View itemView) {
                 super(itemView);
                 mTextView = (TextView) itemView.findViewById(R.id.task_title);
                 mCheckBox = (CheckBox) itemView.findViewById(R.id.task_status);
+
+                itemView.setOnClickListener( new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        if(listener != null ) {
+                            int position = getAdapterPosition();
+                            if (position != RecyclerView.NO_POSITION) {
+                                listener.onTaskClick(itemView, mTasks.get(position));
+                            }
+                        }
+                    }
+                });
+
             }
+
         }
     }
+
+    public  interface  TaskItemListener {
+       void onTaskClick(View view, Task taskId);
+
+    }
+
 }
