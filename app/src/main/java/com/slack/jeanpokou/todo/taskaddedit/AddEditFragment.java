@@ -14,20 +14,20 @@ import android.widget.Toast;
 import com.slack.jeanpokou.todo.R;
 
 
-public class AddEditTaskFragment extends Fragment implements TaskAddEditMvp.View    {
+public class AddEditFragment extends Fragment implements TaskAddEditMvp.View    {
 
-    private static final String TAG = AddEditTaskFragment.class.getSimpleName();
+    private static final String TAG = AddEditFragment.class.getSimpleName();
     public static final String ARGUMENT_EDIT_TASK_ID = " EDIT_TASK_ID" ;
     public static final int REQUEST_ADD_EDIT = 1;
 
 
     private TaskAddEditMvp.Presenter presenter;
 
-    public AddEditTaskFragment() {
+    public AddEditFragment() {
     }
 
-    public static AddEditTaskFragment newInstance() {
-        return new AddEditTaskFragment();
+    public static AddEditFragment newInstance() {
+        return new AddEditFragment();
     }
 
     @Override

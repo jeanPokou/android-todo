@@ -12,12 +12,6 @@ import com.slack.jeanpokou.todo.util.Injection;
 
 public class ListActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
-
-    private ListPresenter listPresenter;
-
-    private ListNavigator listNavigator;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +22,13 @@ public class ListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         //setup the navigation drawer
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -46,7 +42,7 @@ public class ListActivity extends AppCompatActivity {
         }
 
         // Create the ListPresenter
-        listPresenter = new ListPresenter(
+        ListPresenter listPresenter = new ListPresenter(
                 Injection.provideTaskRepository(getApplicationContext())
                 , listFragment
                 , new ListNavigator(listFragment)

@@ -66,6 +66,32 @@ public class LocalDataSource implements TasksDataContract {
     }
 
     @Override
+    public void retrieveTask(@NonNull final String taskId, @NonNull final retrieveTaskCallBack callback) {
+
+        checkNotNull(taskId, "taskId should not be null");
+        checkNotNull(callback, "callback can not be null");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final Task task = mTaskDao.getTask(taskId);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!task.isEmpty()) {
+                            callback.onSuccess(task);
+                        } else {
+                            callback.onError();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+
+    }
+
+    @Override
     public void saveTasks(@NonNull final Task task, @NonNull final saveTasksCallback callback) {
         checkNotNull(task, "task to save can not be null");
         checkNotNull(callback, "callback can not be null");
@@ -101,13 +127,13 @@ public class LocalDataSource implements TasksDataContract {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-               mTaskDao.deleteTaskById(taskId);
-               mAppExecutors.mainThread( ).execute(new Runnable() {
-                   @Override
-                   public void run() {
+                mTaskDao.deleteTaskById(taskId);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
 
-                   }
-               });
+                    }
+                });
             }
         };
         mAppExecutors.diskIO().execute(runnable);

@@ -47,6 +47,23 @@ public class TasksRepository implements TasksDataContract {
     }
 
     @Override
+    public void retrieveTask(@NonNull String taskId, @NonNull final retrieveTaskCallBack callback) {
+        mTasksLocalDataSource.retrieveTask(taskId, new retrieveTaskCallBack() {
+            @Override
+            public void onSuccess(Task task) {
+               callback.onSuccess(task);
+            }
+
+            @Override
+            public void onError() {
+                callback.onError();
+
+            }
+        });
+
+    }
+
+    @Override
     public void saveTasks(@NonNull Task tasks, @NonNull final saveTasksCallback callback) {
 
         checkNotNull(tasks);

@@ -11,7 +11,7 @@ import com.slack.jeanpokou.todo.data.source.TasksRepository;
 import java.util.List;
 
 
-public class AddEditTaskPresenter implements TaskAddEditMvp.Presenter, TasksDataContract.retrieveTasksCallBack {
+public class AddEditPresenter implements TaskAddEditMvp.Presenter, TasksDataContract.retrieveTasksCallBack {
 
     @NonNull
     private final TaskAddEditMvp.View addEditTaskView;
@@ -34,8 +34,8 @@ public class AddEditTaskPresenter implements TaskAddEditMvp.Presenter, TasksData
      * @param tasksRepository
      * @param shouldLoadDataFromRepo
      */
-    public AddEditTaskPresenter(@Nullable String taskId, @NonNull final TaskAddEditMvp.View addEditTaskView,
-                                @NonNull final TasksRepository tasksRepository, @NonNull TaskAddEditMvp.Navigator navigator, boolean shouldLoadDataFromRepo) {
+    public AddEditPresenter(@Nullable String taskId, @NonNull final TaskAddEditMvp.View addEditTaskView,
+                            @NonNull final TasksRepository tasksRepository, @NonNull TaskAddEditMvp.Navigator navigator, boolean shouldLoadDataFromRepo) {
         this.addEditTaskView = addEditTaskView;
         this.tasksRepository = tasksRepository;
         mTaskId = taskId;

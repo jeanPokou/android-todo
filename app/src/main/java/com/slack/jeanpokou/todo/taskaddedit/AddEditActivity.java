@@ -1,8 +1,8 @@
 package com.slack.jeanpokou.todo.taskaddedit;
 
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.slack.jeanpokou.todo.R;
@@ -12,8 +12,8 @@ public class AddEditActivity extends AppCompatActivity {
 
     public static final int REQUEST_ADD_TASK = 1;
 
-    private AddEditTaskPresenter presenter;
-    private  AddEditNavigator navigator;
+    private AddEditPresenter presenter;
+    private AddEditNavigator navigator;
 
     private String taskId;
     private ActionBar mActionBar;
@@ -31,28 +31,24 @@ public class AddEditActivity extends AppCompatActivity {
         mActionBar.setDisplayShowHomeEnabled(true);
 
         // attachPresenter fragment to activity
-        AddEditTaskFragment addEditTaskFragment = (AddEditTaskFragment) getSupportFragmentManager()
+        AddEditFragment addEditFragment = (AddEditFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.contentFrame);
-        if (addEditTaskFragment == null) {
-            addEditTaskFragment = AddEditTaskFragment.newInstance();
+        if (addEditFragment == null) {
+            addEditFragment = AddEditFragment.newInstance();
 
-            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, addEditTaskFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, addEditFragment).commit();
         }
 
 
         // get Intent with extra  sent from TaskActivity
-        String taskId = getIntent().getStringExtra(AddEditTaskFragment.ARGUMENT_EDIT_TASK_ID);
+        String taskId = getIntent().getStringExtra(AddEditFragment.ARGUMENT_EDIT_TASK_ID);
         setToolBarTitle(taskId);
-
-        /**
-         * Use presenter and attaching ListFragment, Repository and TaskId
-         */
 
         navigator = new AddEditNavigator(this);
 
-        presenter = new AddEditTaskPresenter(
+        presenter = new AddEditPresenter(
                 taskId
-                , addEditTaskFragment
+                , addEditFragment
                 , Injection.provideTaskRepository(getApplicationContext())
                 , navigator
                 , false

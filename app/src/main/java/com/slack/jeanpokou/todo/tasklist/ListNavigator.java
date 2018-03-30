@@ -3,6 +3,7 @@ package com.slack.jeanpokou.todo.tasklist;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import com.slack.jeanpokou.todo.taskaddedit.AddEditActivity;
+import com.slack.jeanpokou.todo.taskdetail.DetailActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -18,6 +19,14 @@ public class ListNavigator implements TaskListMvp.Navigator {
     public void navigateToAddEdit() {
         Intent intent = new Intent(fragment.getContext(), AddEditActivity.class);
         fragment.startActivityForResult(intent,AddEditActivity.REQUEST_ADD_TASK);
+
+    }
+
+    @Override
+    public void navigateToDetail(String taskId) {
+        Intent intent = new Intent(fragment.getContext(), DetailActivity.class);
+        intent.putExtra("TASK_ID", taskId);
+        fragment.startActivityForResult(intent,DetailActivity.REQUEST_TASK_DETAIL);
 
     }
 }

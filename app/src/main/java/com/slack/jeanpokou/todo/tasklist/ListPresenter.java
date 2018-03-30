@@ -19,7 +19,7 @@ public class ListPresenter implements TaskListMvp.Presenter {
     private final TaskListMvp.View taskListView;
     private final TaskListMvp.Navigator listNavigator;
 
-    public ListPresenter(@NonNull TasksRepository tasksRepository, @NonNull TaskListMvp.View view, @NonNull TaskListMvp.Navigator navigator) {
+    ListPresenter(@NonNull TasksRepository tasksRepository, @NonNull TaskListMvp.View view, @NonNull TaskListMvp.Navigator navigator) {
 
         repository = checkNotNull(tasksRepository, "repository can not be null");
         taskListView = checkNotNull(view, "tasks view can not be null");
@@ -34,7 +34,7 @@ public class ListPresenter implements TaskListMvp.Presenter {
         repository.saveTasks(task, new TasksDataContract.saveTasksCallback() {
             @Override
             public void onSuccess(Long id) {
-                taskListView.showSuccessSavedTasks(id);
+                taskListView.showSuccessSavedTasks();
             }
 
             @Override
@@ -64,15 +64,15 @@ public class ListPresenter implements TaskListMvp.Presenter {
 
 
     @Override
-    public void result(int requestCode, int resultCode, Long resultData) {
+    public void result(int requestCode, int resultCode) {
         if (AddEditActivity.REQUEST_ADD_TASK == requestCode && android.app.Activity.RESULT_OK == resultCode) {
-            taskListView.showSuccessSavedTasks(resultData);
+            taskListView.showSuccessSavedTasks();
         }
 
     }
 
     @Override
-    public void navigateToAddEditTask() {
+    public void navigateToAddEdit() {
         listNavigator.navigateToAddEdit();
     }
 
@@ -80,6 +80,11 @@ public class ListPresenter implements TaskListMvp.Presenter {
     public void deleteTaskById(String taskId) {
         repository.deleteTaskById(taskId);
         taskListView.showSuccessDeleteTask();
+    }
+
+    @Override
+    public void navigateToDetail(String taskId) {
+        listNavigator.navigateToDetail(taskId);
     }
 
 

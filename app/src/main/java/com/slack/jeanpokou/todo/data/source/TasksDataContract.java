@@ -15,6 +15,8 @@ public interface TasksDataContract {
 
     void retrieveTasks(@NonNull retrieveTasksCallBack callback);
 
+    void retrieveTask(@NonNull String taskId ,@NonNull retrieveTaskCallBack callback);
+
     void saveTasks(@NonNull Task tasks, @NonNull saveTasksCallback callback);
 
     void deleteTaskById(@NonNull String taskId);
@@ -26,6 +28,13 @@ public interface TasksDataContract {
         void onError();
     }
 
+    interface retrieveTaskCallBack {
+
+        void onSuccess(Task task);
+
+        void onError();
+    }
+
     interface saveTasksCallback {
 
         void onSuccess(Long id);
@@ -33,8 +42,6 @@ public interface TasksDataContract {
         void onError();
 
     }
-
-
 
 
 }

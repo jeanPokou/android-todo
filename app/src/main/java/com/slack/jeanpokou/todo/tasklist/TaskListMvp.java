@@ -16,7 +16,7 @@ public interface TaskListMvp {
 
         void showTasks(List<Task> listTasks);
 
-        void showSuccessSavedTasks(Long id);
+        void showSuccessSavedTasks();
 
         void showErrorSavedTasks();
 
@@ -27,16 +27,19 @@ public interface TaskListMvp {
 
         void addNewTask(Task task);
 
-        void result(int requestCode , int resultCode, Long resultData);
+        void result(int requestCode , int resultCode);
 
-        void navigateToAddEditTask();
+        void navigateToAddEdit();
 
         void deleteTaskById(String taskId);
+
+        void navigateToDetail(String taskId);
     }
 
     interface Navigator extends BaseNavigator {
 
         void navigateToAddEdit();
 
+        void navigateToDetail(String taskId);
     }
 }

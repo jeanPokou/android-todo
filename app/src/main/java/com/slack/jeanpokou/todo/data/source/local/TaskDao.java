@@ -16,6 +16,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks")
     List<Task> getTask();
 
+    @Query("SELECT * FROM tasks where entryId =  :taskId ")
+    Task getTask(String taskId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(Task task);
 
