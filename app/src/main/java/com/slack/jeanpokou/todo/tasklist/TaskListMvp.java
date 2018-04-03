@@ -34,6 +34,8 @@ public interface TaskListMvp {
         void deleteTaskById(String taskId);
 
         void navigateToDetail(String taskId);
+
+        void completeTask(Task task);
     }
 
     interface Navigator extends BaseNavigator {

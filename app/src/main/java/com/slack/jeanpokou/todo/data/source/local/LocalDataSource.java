@@ -138,4 +138,21 @@ public class LocalDataSource implements TasksDataContract {
         };
         mAppExecutors.diskIO().execute(runnable);
     }
+
+    @Override
+    public void completeTask(@NonNull final String taskId) {
+       Runnable runnable = new Runnable() {
+           @Override
+           public void run() {
+               mTaskDao.completeTask(taskId,true);
+               mAppExecutors.mainThread().execute(new Runnable() {
+                   @Override
+                   public void run() {
+
+                   }
+               });
+           }
+       };
+       mAppExecutors.diskIO().execute(runnable);
+    }
 }

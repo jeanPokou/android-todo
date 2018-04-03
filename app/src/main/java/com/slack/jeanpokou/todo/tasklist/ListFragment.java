@@ -8,7 +8,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -19,8 +23,6 @@ import android.widget.Toast;
 import com.google.common.collect.Lists;
 import com.slack.jeanpokou.todo.R;
 import com.slack.jeanpokou.todo.data.Task;
-import com.slack.jeanpokou.todo.taskdetail.DetailActivity;
-import com.slack.jeanpokou.todo.taskdetail.TaskDetailMvp;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 
         mAdapter = new TasksAdapter(Lists.<Task>newArrayList(), new TaskItemListener() {
             @Override
-            public void onTaskClick(View view, final Task taskId) {
+            public void onTaskClick(final Task taskId) {
                 mPresenter.navigateToDetail(taskId.getId());
 
 //                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
@@ -74,6 +76,11 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 //                alertDialog.show();
             }
 
+            @Override
+            public void onTaskCompleted(Task task) {
+                mPresenter.completeTask(task);
+            }
+
         });
 
         taskRecyclerView.setAdapter(mAdapter);
@@ -81,7 +88,7 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
         taskRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         // setup floating action button
-        // clikc on floating action navigate to AddEditTask
+        // click on floating action navigate to AddEditTask
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
         fab.setImageResource(R.drawable.ic_add);
         fab.setOnClickListener(new OnClickListener() {
@@ -90,6 +97,8 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
                 mPresenter.navigateToAddEdit();
             }
         });
+
+        setHasOptionsMenu(true);
         // Return rootView
         return rootView;
     }
@@ -128,12 +137,12 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
 
     @Override
     public void showTaskDetailsUi(String taskId) {
-     mListNavigator.navigateToDetail(taskId);
+        mListNavigator.navigateToDetail(taskId);
     }
 
     @Override
     public void showSuccessSavedTasks() {
-        Toast.makeText(getContext(), "TASK ADDED WITH SUCCESS", Toast.LENGTH_SHORT ).show();
+        Toast.makeText(getContext(), "TASK ADDED WITH SUCCESS", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -142,12 +151,36 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.tasklist_menu, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_clear:
+                Log.d(TAG, "clear all tasks");
+                break;
+            case R.id.menu_filter:
+                Log.d(TAG, "filter tasks");
+                break;
+            case R.id.menu_refresh:
+                Log.d(TAG, "Refresh Tasks");
+                break;
+        }
+        return true;
+    }
+
+    @Override
     public void showSuccessDeleteTask() {
         Toast.makeText(getContext(), "TASK REMOVED SUCCESSFULLY", Toast.LENGTH_LONG).show();
     }
 
     public interface TaskItemListener {
-        void onTaskClick(View view, final Task taskId);
+        void onTaskClick(final Task task);
+
+        void onTaskCompleted(final Task task);
 
     }
 
@@ -197,18 +230,35 @@ public class ListFragment extends android.support.v4.app.Fragment implements Tas
                 mTextView = (TextView) itemView.findViewById(R.id.task_title);
                 mCheckBox = (CheckBox) itemView.findViewById(R.id.task_status);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (listener != null) {
-                            int position = getAdapterPosition();
-                            if (position != RecyclerView.NO_POSITION) {
-                                listener.onTaskClick(itemView, mTasks.get(position));
-                            }
-                        }
-                    }
-                });
+                if (listener != null) {
 
+                    Log.d("Test", "inside view holder listener");
+                        itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                int position = getAdapterPosition();
+                                final Task task = mTasks.get(position);
+                                if (position != RecyclerView.NO_POSITION) {
+                                    listener.onTaskClick(task);
+                                }
+                            }
+                        });
+
+                        mCheckBox.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                int position = getAdapterPosition();
+                                final Task task = mTasks.get(position);
+                                mCheckBox.setChecked(task.isCompleted());
+                                if (position != RecyclerView.NO_POSITION) {
+                                    //if (!task.isCompleted()) {
+                                    listener.onTaskCompleted(task);
+                                    //}
+                                }
+                            }
+                        });
+
+                }
             }
 
         }

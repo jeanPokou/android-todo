@@ -1,6 +1,7 @@
 package com.slack.jeanpokou.todo.tasklist;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.slack.jeanpokou.todo.data.Task;
 import com.slack.jeanpokou.todo.data.source.TasksDataContract;
@@ -85,6 +86,11 @@ public class ListPresenter implements TaskListMvp.Presenter {
     @Override
     public void navigateToDetail(String taskId) {
         listNavigator.navigateToDetail(taskId);
+    }
+
+    @Override
+    public void completeTask(Task task) {
+       repository.completeTask(task.getId() );
     }
 
 

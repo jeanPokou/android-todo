@@ -91,4 +91,9 @@ public class TasksRepository implements TasksDataContract {
         mTasksLocalDataSource.deleteTaskById(taskId);
     }
 
+    @Override
+    public void completeTask(@NonNull String taskId) {
+       mTasksLocalDataSource.completeTask(taskId);
+    }
+
 }

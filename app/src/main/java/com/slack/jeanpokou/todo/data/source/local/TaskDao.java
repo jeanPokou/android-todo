@@ -25,4 +25,7 @@ public interface TaskDao {
     @Query("DELETE FROM tasks WHERE entryId =  :taskId")
     int deleteTaskById(String taskId);
 
+    @Query("UPDATE tasks set completed = :status  WHERE entryId = :taskId")
+    int completeTask(String taskId, boolean status);
+
 }

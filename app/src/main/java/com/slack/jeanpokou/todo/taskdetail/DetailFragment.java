@@ -44,7 +44,7 @@ public class DetailFragment extends Fragment implements TaskDetailMvp.View {
         View root = inflater.inflate(R.layout.fragment_detail, container, false);
         setHasOptionsMenu(true);
         mDetailTitle = (TextView) root.findViewById(R.id.task_detail_title);
-        mDetailDescription = (TextView) root.findViewById(R.id.add_task_description);
+        mDetailDescription = (TextView) root.findViewById(R.id.task_detail_description);
         mDetailComplete = (CheckBox) root.findViewById(R.id.task_detail_complete);
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_edit_task);
@@ -88,9 +88,8 @@ public class DetailFragment extends Fragment implements TaskDetailMvp.View {
 
     @Override
     public void showTask(Task task) {
-        // mDetailTitle.setText("");
-       // mDetailDescription.setText("");
-
+        this.mDetailTitle.setText(task.getTitle());
+        this.mDetailDescription.setText(task.getDescription());
     }
 
     @Override

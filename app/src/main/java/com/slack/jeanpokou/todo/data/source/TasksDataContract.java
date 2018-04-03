@@ -21,6 +21,9 @@ public interface TasksDataContract {
 
     void deleteTaskById(@NonNull String taskId);
 
+    void completeTask(@NonNull String taskId);
+
+
     interface retrieveTasksCallBack {
 
         void onSuccess(List<Task> taskList);
